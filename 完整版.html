@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分頁與功能按鈕示範</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        img {
+            width: 100%;
+            height: auto;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        h2 {
+            color: #27ae60;
+        }
+        .info-box {
+            background: #eef9f1;
+            padding: 15px;
+            border-left: 5px solid #27ae60;
+            margin-top: 20px;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            background-color: #27ae60;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .pagination button:hover {
+            background-color: #2ecc71;
+        }
+        .back-to-top {
+            display: none; /* 初始隱藏 */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            width: 150px;
+        }
+        .back-to-top:hover {
+            background-color: #2980b9;
+        }
+        #scrollToBottom {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #scrollToBottom:hover {
+            background-color: #0056b3;
+        }
+        .ad-banner {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 160px;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+        }
+        .ad-banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .left {
+            left: 10px;
+        }
+        .right {
+            right: 10px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #555;
+        }
+        .close-btn:hover {
+            color: red;
+        }
+		
+		<!-- 左側廣告看板 -->
+    .ad-banner a {
+        display: block;
+        text-align: center;
+    }
+    .ad-banner img {
+        display: block;
+        margin: 0 auto;
+    }
+    .ad-banner p {
+        margin-top: 5px; /* 調整文字與圖片的距離 */
+        font-size: 14px;
+        color: #333;
+    }
+	
+	.ad-banner.left p { margin-top: 5px; color: blue; }
+    .ad-banner.right p { margin-top: 3px; color: red; }
+		
+    </style>
+</head>
+<body>
+    
+	<!-- 左側廣告看板 -->
+<div id="leftAd" class="ad-banner left">
+    <span class="close-btn" onclick="confirmCloseAd('leftAd')">✖</span>
+    <a href="https://www.pcschool.com.tw/comic-character?fromto=99001021" target="_blank">
+        <img src="https://www.pcschool.com.tw/updimg/act/course_design_intro/20240626a16001/2.webp" alt="左側廣告1">
+		<p>Pro級！電繪職人創作班</p>
+    </a>
+    <a href="https://www.pcschool.com.tw/visual-design?fromto=99001021" target="_blank">
+        <img src="https://www.pcschool.com.tw/updimg/act/course_design_intro/20240621a1001/1.webp" alt="左側廣告2">
+		<p>AI視覺設計</p>
+    </a>
+    <a href="https://www.worker360.com.tw/video/DiT000608" target="_blank">
+        <img src="https://gjundisk01.blob.core.windows.net/it360/worker360/Course/DiT000608/01195tc3.webp" alt="左側廣告3">
+		<p>軟裝美學晉級技法</p>
+    </a>
+    <a href="https://www.worker360.com.tw/video/DiT000593" target="_blank">
+        <img src="https://gjundisk01.blob.core.windows.net/it360/worker360/Course/DiT000593/BN01.webp" alt="左側廣告4">
+		<p>手機攝影新手越級指南</p>
+    </a>
+</div>
+
+<!-- 右側廣告看板 -->
+<div id="rightAd" class="ad-banner right">
+    <span class="close-btn" onclick="confirmCloseAd('rightAd')">✖</span>
+    <a href="https://www.worker360.com.tw/video/DiT000406" target="_blank">
+        <img src="https://gjundisk01.blob.core.windows.net/it360/worker360/Course/DiT000406/UE4.webp" alt="右側廣告1">
+		<p>魔幻場景邁向遊戲設計師</p>
+    </a>
+    <a href="https://www.worker360.com.tw/video/DiT000552" target="_blank">
+        <img src="https://gjundisk01.blob.core.windows.net/it360/Video/79fa9ff6889f440bbd0ebef01754ca37.png" alt="右側廣告2">
+		<p>Canva打造吸睛圖文</p>
+    </a>
+    <a href="https://www.worker360.com.tw/video/DiT000121" target="_blank">
+        <img src="https://gjundisk01.blob.core.windows.net/it360/Video/cdedc5191de448e6999349338dd01e69.jpg" alt="右側廣告3">
+		<p>建模與貼圖上色</p>
+    </a>
+    <a href="https://www.worker360.com.tw/video/DiT000570" target="_blank">
+        <img src="https://gjundisk01.blob.core.windows.net/it360/Video/ef3d7d9ee5e64ea9a3131af088f8cd14.png" alt="右側廣告4">
+		<p>新手也能上手的影片剪輯</p>
+    </a>
+</div>
+
+
+    <div class="container" id="restaurant-container">
+        <h1>巨匠電腦三重附近美食</h1>
+
+        <!-- 餐廳資料 (共10間作為範例) -->
+        <div class="restaurant" id="restaurant-1">
+            <h2>東引快刀手三重店</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipPnVB5Dh4H5OBxrkyvWswt8xatmv57ur9pVCX1E=s680-w680-h510" alt="東引快刀手">
+            <p>松山傳奇宵夜「東引小吃店」以美味的麵食、滷得又香又透的滷味小菜廣受喜愛，第二代開的「東引快刀手」在各地人氣也都超夯，...</p>
+            <div class="info-box">
+                <h3>東引快刀手三重店</h3>
+                <p><strong>營業時間：</strong>周一至周日 11:00-2:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段67號</p>
+                <p><strong>電話：</strong>02-29880660</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115667.30823940801!2d121.39225198906253!3d25.04753051754291!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a900301aea81%3A0x140d52805345e548!2z5p2x5byV5b-r5YiA5omL5LiJ6YeN5bqXKOW_heWQg-efpeWQjeWuteWknOe-jumjn-OAgeW5s-WDuem6temkqCDmu7flkbPlsI_lkIPjgIHkurrmsKPpioXmnb_mlpnnkIYp!5e0!3m2!1szh-TW!2stw!4v1743166519530!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>         
+
+            </div>
+        </div>
+
+        <div class="restaurant" id="restaurant-2">
+            <h2>樂釜 Love Hot Pot 極上鍋物</h2>
+            <img src="https://lh3.googleusercontent.com/gps-proxy/ALd4DhF-8ootL46BDHXrfwZgoJZ_bkSVXgcsntno2wi62RKom8U_oRg9QxmnxH98UWk3Ma-fRggEJRlwhvpXg-klDyocbaQgx73aMM_7DbfMX6QiV5PYmhfPMziOyuXerGrzF0-pZh2sg5-qr10Eqj5SWOy3_m6E3XWIQy7RD9MX69kEZkoJK3fh6cGsqQ=s680-w680-h510" alt="樂釜 Love Hot Pot 極上鍋物">
+            <p>推薦大家直接點雙人套餐，套餐內容有夠豐富，不管你想狂涮肉片或是狂吃海鮮，都能滿足你想要吃好火鍋的需求！</p>
+            <div class="info-box">
+                <h3>樂釜 Love Hot Pot 極上鍋物</h3>
+                <p><strong>營業時間：</strong>周一至周日 11:30-23:00</p>
+                <p><strong>電話：</strong>02-89882522</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段15-3號1樓</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115653.18164832667!2d121.34586439726559!3d25.0625003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a9c7763c3b29%3A0xbee8af888cc7a5a8!2z5qiC6YecIExvdmUgSG90IFBvdCDmpbXkuIrpjYvniako6YeN5paw5bqXKQ!5e0!3m2!1szh-TW!2stw!4v1743166319715!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>   
+
+            </div>
+        </div>
+
+        <!-- 這裡可以繼續添加其他餐廳，最多 8 間餐廳 -->
+        <div class="restaurant" id="restaurant-3">
+            <h2>三商巧福</h2>
+            <img src="https://lh3.googleusercontent.com/proxy/vBmhoKLPA9wnn_YmhLaRU9REVThROreSyaCBHJPvYFaWe_seEGDR8sBIgYT03ezZFHqEbWw2nCKbo48sLVx5CHEtCbqTRO4KEGXGoglDpbnPpkcjfkKOxhcev3-rte3eiWrCOsHDuXiKf8-umVtHSFtUKk-gfQ=s680-w680-h510" alt="三商巧福">
+            <p>台灣最大牛肉麵連鎖店三商巧福，提供每一位客人舒適、溫馨的用餐環境，全時段的服務、親切的價格、道地的台灣原味，是全家聚餐、朋友約會的最佳選擇。</p>
+            <div class="info-box">
+                <h3>三商巧福</h3>
+                <p><strong>營業時間：</strong>周一至周日 11:00-21:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段11之4號</p>
+                <p><strong>電話：</strong>02-89814984</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d759.7836477678921!2d121.49820832537306!3d25.062549366154688!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a91898866f07%3A0xebde9da6bd85ae64!2z5LiJ5ZWG5ben56aPIOS4iemHjemWgOW4gg!5e0!3m2!1szh-TW!2stw!4v1743165785112!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>        
+
+            </div>
+        </div>
+
+        <div class="restaurant" id="restaurant-4">
+            <h2>宜品福州乾拌麵</h2>
+            <img src="https://lh3.googleusercontent.com/proxy/5Bt9y6gFPD-A8EvYwJHE_c6XnOXxGjfj1u2NmESGVAsPqQPqgjV3keDXWfLSuDJFYMKsbkA03XQC1h4Gup-qJmGhMUPbJ93JiZRxNc5L7mbo2cVfhnfOt-TKwF6zooljpxlCOqhRl2RQFAZAwvBdwPJtBSk5QZU=s680-w680-h510" alt="宜品福州乾拌麵">
+            <p>乾拌麵是這家的招牌，就是傻瓜乾麵，上桌是沒加任何調味料的素麵，只撒了點蔥花，之後就自行添加調料，搭配出自己喜歡的味道~</p>
+            <div class="info-box">
+                <h3>宜品福州乾拌麵</h3>
+                <p><strong>營業時間：</strong>周一至周日 10:00-21:30</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段11-3號</p>
+                <p><strong>電話：</strong>02-29849853</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28913.271388827317!2d121.46040167431643!3d25.0626021!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a9bcbfd52a09%3A0x37220ed5d5d40ec8!2z5a6c5ZOB56aP5bee5Lm-5ouM6bq1!5e0!3m2!1szh-TW!2stw!4v1743246040015!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>        
+            </div>
+        </div>
+		
+		<div class="restaurant" id="restaurant-5">
+            <h2>肯德基</h2>
+            <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB98rKn3SOHZCQuPzzpKEuH0PWEBobKNViQ1qGvUdzu2CwVKq_rQMYVDTIvSCxG5zxmZukM__wEXS8D4-FxXFLrvlcB9ihKueoeog4C2iuAn3S8mooX8RBVhAU4v_WPYT9rmyUkVJw=s680-w680-h510" alt="肯德基">
+            <p>肯德基台灣炸雞領導品牌，秉持「新鮮手作」的理念，從炸雞、漢堡到蛋撻，皆為店內現場烹調。
+			熱銷咔啦脆雞以獨家香料醃製，讓每塊炸雞擁有引以為傲的酥脆外皮、肉質多汁又鮮嫩。而蛋撻由專業師傅親手捏製，
+			創造出多達163層酥脆的外皮口感、漢堡選用原塊炸雞腿肉搭配新鮮蔬菜，實踐肯德基追求高品質的堅持。</p>
+            <div class="info-box">
+                <h3>肯德基</h3>
+                <p><strong>營業時間：</strong>周一至周五 10:00-00:00 六日 9:00-00:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段1-1號</p>
+                <p><strong>電話：</strong>02-29849853</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.146040557708!2d121.49697907511083!3d25.06303883712204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a918b7e1a443%3A0x67092a4f100863b8!2z6IKv5b635Z-6IOS4iemHjemHjeaWsOS6jOmkkOW7sw!5e0!3m2!1szh-TW!2stw!4v1743249747146!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>        
+            </div>
+        </div>
+
+        <div class="restaurant" id="restaurant-6">
+            <h2>歐家莊雞/魯肉飯</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipOgIFMiJCmVnG5zcBUd3O_luxVV5jq_lm-IzKyK=s680-w680-h510" alt="歐家莊雞/魯肉飯">
+            <p>什錦麵裡的料有赤肉、豬腸及豬肝，每個材料都處理得十分恰當，赤肉帶些肥肉部分，有口感卻不柴；
+			豬長清理的乾淨，軟嫩有嚼勁；豬肝更是我最愛的爽脆口感，可見用料非常新鮮。
+			湯頭部分有麻油香氣，還有些油蔥、韭菜及豆芽，喝起來清淡且清爽，喝完也不會覺得口乾舌燥。</p>
+            <div class="info-box">
+                <h3>歐家莊雞/魯肉飯</h3>
+                <p><strong>營業時間：</strong>周一至周六 12:10-19:30</p>
+                <p><strong>地址：</strong>新北市三重區文化北路1-1號</p>
+                <p><strong>電話：</strong> 02-29727566</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1399667648434!2d121.4973024751107!3d25.063244737113795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a918bbfa60d9%3A0x308b76579352e2b2!2z5q2Q5a626I6K6ZueL-mtr-iCiemjrw!5e0!3m2!1szh-TW!2stw!4v1743250272638!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>        
+            </div>
+        </div>
+		
+		<div class="restaurant" id="restaurant-7">
+            <h2>阿宏師涼麵嘉義雞肉飯</h2>
+            <img src="https://lh3.googleusercontent.com/proxy/RAD7lX2Up45M_7HUS00-Mn9Et36lRGc6e5mOvNvQbRbUuLXP-8_4zC1sW1MnGmbIl76h5grVYwvV4FvS-AB8AhuZ5kzMcFREyyv8E2XTcBOBAspKWoruJwZH6mVXX-KLlUXoz5mpXvQOoHRdPXz6Ugv_RdbKsQ=s680-w680-h510" alt="阿宏師涼麵嘉義雞肉飯">
+            <p>麻醬加上美乃滋後味道變得較溫和，口感上也比剛的麻醬涼麵更加滑順。
+			除了涼麵，雞肉飯、魯肉飯和雞肉飯也是他們熱賣的餐點。</p>
+            <div class="info-box">
+                <h3>阿宏師涼麵嘉義雞肉飯</h3>
+                <p><strong>營業時間：</strong>周一至周日 16:00-4:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段31號1樓</p>
+                <p><strong>電話：</strong>02-29818566</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d28913.867459508878!2d121.4709188!3d25.0600761!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a9ac4bb0e44b%3A0x29cdd6e424525880!2z6Zi_5a6P5bir5ra86bq15ZiJ576p6Zue6IKJ6aOvLeS4iemHjeWkqeWPsOW6l-WuteWknOe-jumjnzI05bCP5pmC!5e0!3m2!1szh-TW!2stw!4v1743253201336!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>        
+            </div>
+        </div>
+		
+		<div class="restaurant" id="restaurant-8">
+            <h2>三重牛乳大王</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipMQgXdvgBDIZS0f96JG5qmQrSADveX1nB8mgMfs=s680-w680-h510" alt="三重牛乳大王">
+            <p>飲料類有各式果汁牛乳、特調飲品、精緻茶飲、香醇奶茶、消暑冰沙、水果乳酸、酸甜果醋、布丁凍飲，
+			很多都是懷念的古早味，現在新型態的飲料店已不多見搭配現炸香雞排、三明治、漢堡、吐司等點心，
+			吃的喝的來到《三重牛乳大王》就能一次滿足，確實很適合選做三重下午茶、三重宵夜的小店。</p>
+            <div class="info-box">
+                <h3>三重牛乳大王</h3>
+                <p><strong>營業時間：</strong>周一至周日 9:30-23:30</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段73號</p>
+                <p><strong>電話：</strong>02-29895718</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.176143344327!2d121.49396427511059!3d25.06201833716328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a945743d7d9f%3A0x33730b2db058f0e1!2z5LiJ6YeN54mb5Lmz5aSn546L!5e0!3m2!1szh-TW!2stw!4v1743253704146!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>        
+            </div>
+        </div>
+		
+		<div class="restaurant" id="restaurant-9">
+            <h2>狂一鍋</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipPXw5GRskMm5OIu1TaZmNxMW0hDkgBunBo7Jpyw=s680-w680-h510-rw" alt="狂一鍋">
+            <p>總共有13個湯底，然後每種湯底都可以選擇搭配的肉品跟海鮮，除了霸氣魷魚螺肉蒜是固定的，每種湯底都很特別，
+			像是功夫排骨酥鍋、生炒花枝鍋、爆炒蒜頭蛤蜊雞鍋、客家鹹湯圓鍋與新推出的國農牛乳鍋等等，很多口味。</p>
+            <div class="info-box">
+                <h3>狂一鍋</h3>
+                <p><strong>營業時間：</strong>周一至周五 中午11:30-15:00 晚上17:30-00:00 六日  11:30-00:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段79號1樓</p>
+                <p><strong>電話：</strong>02-29718833</p>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.178582784994!2d121.49375347511064!3d25.061935637166663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a94d8c5cadcf%3A0x8f5cd985a6b970b4!2z54uC5LiA6Y2L77yN5LiJ6YeN6YeN5paw5bqX77yN6bm56aaZ5rmv6aCt5bCI6ZaA5bqX!5e0!3m2!1szh-TW!2stw!4v1743254412584!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>        
+            </div>
+        </div>
+		
+		<div class="restaurant" id="restaurant-10">
+            <h2>人从众厚切牛排</h2>
+            <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB_k7DE3dbvx-Kuly2vUy8uVqIJvql_lwycPIJjH8N9TrJ_LJ5kBeSQGH4ngEEw73-C7wdX_oNCdoyG02mJW800dBuW5375IiewCQHjlY_V7PyWrOQYeBr3uIw-4YfhHqECTDKk=s680-w680-h510" alt="人从众厚切牛排">
+            <p>自助餐吧檯餐食算是不少，比起很多簡易牛排館只有飲料和單一湯品來比較、此店牛排店之規格這家算不少。
+			店內自助餐吧檯無限享用餐食，舉凡是烤吐司麵包、吐司果醬(果醬有巧克力、花生 ) 、 茶包、湯品(湯品有番茄牛肉湯、奶油濃湯)、霜淇淋、爆米花、飲料(有葡萄柚、檸檬茶、紅茶)
+			牛肉品質算是不錯。這牛排就是一般普通的牛排館會出現地排餐內容，餐點有附鐵板麵、蛋、肉排、花椰菜與玉米筍之簡易蔬菜。</p>
+            <div class="info-box">
+                <h3>人从众厚切牛排</h3>
+                <p><strong>營業時間：</strong>周一至周日 11:00-22:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段89號</p>
+                <p><strong>電話：</strong>02-29818395</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1809691229373!2d121.49351617511053!3d25.061854737169778!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a980261877d9%3A0xb21098bfc7addb54!2z5Lq65LuO5LyX5Y6a5YiH54mb5o6SKOS4iemHjemHjeaWsOW6lyk!5e0!3m2!1szh-TW!2stw!4v1743388584908!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+        </div>
+		
+		<div class="restaurant" id="restaurant-11">
+            <h2>雲林鍋貼</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipOZpeXK3BNuagCeikD2WhntUkPyxK7BJ2B709qi=s680-w680-h5100" alt="雲林鍋貼">
+            <p>《雲林鍋貼》整個鍋貼看起來超迷人的，雖然冰花沒有到很誇張，但鍋貼表皮還是有很明顯的酥度，咬下去很爽脆，
+			高麗菜的感覺是比較爽脆，內餡豬肉吃起來鮮甜多汁，帶有蔥香的味道，雖然不算是香珍鍋貼那樣飽滿厚實，沾上鍋貼醬料，
+			真的還蠻好吃的。</p>
+            <div class="info-box">
+                <h3>雲林鍋貼</h3>
+                <p><strong>營業時間：</strong>周一至周日 11:00-22:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段89號</p>
+                <p><strong>電話：</strong>02-29818395</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1827212626467!2d121.49325147511053!3d25.06179533717217!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a91f3cdca03b%3A0xba7f1ec0daee9a3a!2z6Zuy5p6X6Y2L6LK8!5e0!3m2!1szh-TW!2stw!4v1743388652617!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+        </div>
+		
+		<div class="restaurant" id="restaurant-12">
+            <h2>上賓鐵板燒</h2>
+            <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB9XWYswEF8ruP21Rw6RqrJ1m9VRX7IE5POp8wzAW17QQpzbAa-hwCQnc5Gf_4Yjr3bTqKYleRWG4Xcvn5Pmeoh0dwVUgE3rl2rfRxHjYKzIWhPSKZviOfWMXe4rpt4g1kA7WGY=s680-w680-h510" alt="上賓鐵板燒">
+            <p>「上賓鐵板燒」在份量上可能會讓一些顧客感到有些不足。尤其是配菜如豆芽和高麗菜的
+               份量有限，搭配主餐後仍可能讓人覺得不夠飽足。加上白飯需要另外加點，對於胃口較大
+               的顧客來說，這樣的餐點分量可能稍嫌不夠。不過，如果你只是單純想品味鐵板燒的獨特
+               香氣與口感，這裡的料理仍然是相當值得一試的。</p>
+            <div class="info-box">
+                <h3>上賓鐵板燒</h3>
+                <p><strong>營業時間：</strong>不一定</p>
+                <p><strong>地址：</strong>新北市三重區大同北路4號對面</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.183119475671!2d121.49300727511068!3d25.061781837172845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a96f277600d9%3A0x95609a54804749bd!2z5LiK6LOT6ZC15p2_54eS!5e0!3m2!1szh-TW!2stw!4v1743397460225!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-13">
+            <h2>白河阿婆碗粿米苔目</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipPdWuBQXV87bCypIwWgSkTNcq9s7Eb2xqfSn8PP=s680-w680-h510" alt="白河阿婆碗粿米苔目">
+            <p>阿婆推著車子在市場賣米苔目、碗粿已經50多年了。沒有華麗的包裝，也沒有電視的報導，‧但只要吃上一口，就會被她的味道深深吸引住，彷彿回到古早年代，
+			孩提嘻笑怒罵時的懷舊記憶一一浮現腦海。阿婆十分講求食物的品質，絕不偷工減料或添加任何化學物品，
+			「遵循古法、堅持手工」是阿婆的理念，在阿婆身上，讓人看到了老一輩台灣人對吃的尊嚴與執著。雖然隨著年齡漸長，
+			阿婆不得不放棄這項傳統的手藝，幸好，阿婆將這傳統又美味的做法傳授下來，讓實在的好味道繼續流傳。</p>
+            <div class="info-box">
+                <h3>白河阿婆碗粿米苔目</h3>
+                <p><strong>營業時間：</strong>周一至周日 11:00-21:00</p>
+                <p><strong>地址：</strong>新北市三重區大同北路4號</p>
+				<p><strong>電話：</strong>02-29822289</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14455.66445410751!2d121.4833201!3d25.0708322!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a9cde4b73f03%3A0x489ce2b01399304c!2z55m95rKz6Zi_5amG56KX57K_57Gz6IuU55uuKOe4veW6lyk!5e0!3m2!1szh-TW!2stw!4v1743411379041!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-14">
+            <h2>黑皮牛肉麵</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipMp_AP_Fnj0L91Dxa6z9eauWjBmHDrA85LDYQFY=s680-w680-h510" alt="黑皮牛肉麵">
+            <p>有別於一般牛肉麵，吃起來感覺，像是媽媽的私房菜，小碗麵但肉給很多，除酸菜外，還提供多種醬料，飲料機無限喝，價格便宜。</p>
+            <div class="info-box">
+                <h3>黑皮牛肉麵</h3>
+                <p><strong>地址：</strong>新北市三重區大同北路3號</p>
+				<p><strong>電話：</strong>02-29069868</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1713735818703!2d121.4929901751107!3d25.062180037156754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a90050357e6b%3A0x75c924144bcae73e!2z6buR55qu54mb6IKJ6bq1!5e0!3m2!1szh-TW!2stw!4v1743492577991!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-15">
+            <h2>北路油飯</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipMgkwTCtgqcr1wpFFYxqa48kFIsAqUP_zX6tCV4=s680-w680-h510" alt="北路油飯">
+            <p>熬煮到乳白色的湯底相當可口貌，但入口沒有鹹味，也少了我很愛的酒香，於是自己加了一點胡椒粉提味，腸類煮的軟透，新鮮好吃。</p>
+            <div class="info-box">
+                <h3>北路油飯</h3>
+				<p><strong>營業時間：</strong>周一至周日 6:00-14:00</p>
+                <p><strong>地址：</strong>新北市三重區大同北路7號</p>
+				<p><strong>電話：</strong>02-29819738</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.168910520723!2d121.4929594751106!3d25.062263537153385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a9b320f9ff53%3A0x996b576993738a10!2z5YyX6Lev5rK56aOv!5e0!3m2!1szh-TW!2stw!4v1743492840269!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-16">
+            <h2>芳園鐵板燒</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipODu3VOoi188uMWelmVGo1oeiERFBmULD8x_S79=s680-w680-h510" alt="芳園鐵板燒">
+            <p>想吃粗飽各種肉的也有套餐！吃素的朋友也不餓不著，有菇有蛋有豆腐一次到位。</p>
+            <div class="info-box">
+                <h3>芳園鐵板燒</h3>
+				<p><strong>營業時間：</strong>周一至周日 6:00-14:00</p>
+                <p><strong>地址：</strong>新北市三重區大同北路7號</p>
+				<p><strong>電話：</strong>02-29819738</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1671377019!2d121.49293387511052!3d25.06232363715097!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a91f15733745%3A0x4476f3e1cae32eaf!2z6Iqz5ZyS6ZC15p2_54eS!5e0!3m2!1szh-TW!2stw!4v1743493023521!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-17">
+            <h2>港式臭豆腐</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipPrjWVSl0StL7CW3hZ65yx-kHrTn2vsPWf7o42X=s680-w680-h510" alt="港式臭豆腐">
+            <p>港式脆皮一盤有五個吃法是中間挖一個洞 加入蒜蓉醬汁一口咬下 外層相當酥脆 
+			喀喀聲內餡豆腐卻還是軟嫩的並且嘗起來甜甜鹹鹹整體口感豐富有層次味道又好美味。</p>
+            <div class="info-box">
+                <h3>港式臭豆腐</h3>
+				<p><strong>營業時間：</strong>周一至周日 週六休 15:00-00:00</p>
+                <p><strong>地址：</strong>新北市三重區大同北路2號</p>
+				<p><strong>電話：</strong>0926-167-155</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1830073860992!2d121.49304817511057!3d25.061785637172658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a91f17dfb39b%3A0x6fde8819d5a3beb9!2z5aSn5ZCM5YyX6LevIOa4r-W8j-iHreixhuiFkA!5e0!3m2!1szh-TW!2stw!4v1743494154716!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-18">
+            <h2>里約歐義廚房</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipM_UQUq-9iuzc5DjXIyctvUMb3Nsbd3OH2eQOO3=s680-w680-h510-rw" alt="里約歐義廚房">
+            <p>環境真的很復古風，一上樓就覺得很有氣氛，裝潢、擺設、吊燈、桌巾等都很復古，真的非常適合慶生聚餐，
+			感覺長輩選同學會地點也會選這裡，應該是很多三重人的回憶。</p>
+            <div class="info-box">
+                <h3>里約歐義廚房</h3>
+				<p><strong>營業時間：</strong>周一至周日 11:00-23:00</p>
+                <p><strong>地址：</strong>新北市三重區重新路二段27號2樓</p>
+				<p><strong>電話：</strong>02-29812545</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.166403205083!2d121.49508067511081!3d25.062348537149976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a918b0be32d1%3A0x6e468cd28199ee15!2z6YeM57SE5q2Q576p5bua5oi_LeS4iemHjeW6lw!5e0!3m2!1szh-TW!2stw!4v1743571712562!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-19">
+            <h2>伍角排骨</h2>
+            <img src="https://lh3.googleusercontent.com/gps-cs-s/AB5caB8Rdk0_kIBCA8WOIbjivuAL3h1d5yNCLC5HKxSPfhoZcV2bm8VEjzypSMhdCKndwUnkKtNSYFmDXjfuxjT-0T2bCD9oyZsVn1Y6kmtb0m0znYWQFvqYbdMb8qocT4v8cqNqN86aLw=s680-w680-h510-rw" alt="伍角排骨">
+            <p>港式脆皮一盤有五個吃法是中間挖一個洞 加入蒜蓉醬汁一口咬下 外層相當酥脆 
+			喀喀聲內餡豆腐卻還是軟嫩的並且嘗起來甜甜鹹鹹整體口感豐富有層次味道又好美味。</p>
+            <div class="info-box">
+                <h3>伍角排骨</h3>
+                <p><strong>地址：</strong>新北市三重區大同北路5號</p>
+				<p><strong>電話：</strong>02-29003837</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1830073860992!2d121.49304817511057!3d25.061785637172658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a91f17dfb39b%3A0x6fde8819d5a3beb9!2z5aSn5ZCM5YyX6LevIOa4r-W8j-iHreixhuiFkA!5e0!3m2!1szh-TW!2stw!4v1743494154716!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+		<div class="restaurant" id="restaurant-20">
+            <h2>港式臭豆腐</h2>
+            <img src="https://lh3.googleusercontent.com/p/AF1QipPrjWVSl0StL7CW3hZ65yx-kHrTn2vsPWf7o42X=s680-w680-h510" alt="港式臭豆腐">
+            <p>港式脆皮一盤有五個吃法是中間挖一個洞 加入蒜蓉醬汁一口咬下 外層相當酥脆 
+			喀喀聲內餡豆腐卻還是軟嫩的並且嘗起來甜甜鹹鹹整體口感豐富有層次味道又好美味。</p>
+            <div class="info-box">
+                <h3>港式臭豆腐</h3>
+				<p><strong>營業時間：</strong>周一至周日 週六休 15:00-00:00</p>
+                <p><strong>地址：</strong>新北市三重區大同北路2號</p>
+				<p><strong>電話：</strong>0926-167-155</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.1830073860992!2d121.49304817511057!3d25.061785637172658!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a91f17dfb39b%3A0x6fde8819d5a3beb9!2z5aSn5ZCM5YyX6LevIOa4r-W8j-iHreixhuiFkA!5e0!3m2!1szh-TW!2stw!4v1743494154716!5m2!1szh-TW!2stw" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></p>
+				</div>
+		</div>
+		
+        <!-- 分頁 -->
+    <div class="pagination">
+        <button onclick="prevPage(1)">Prev</button>
+        <button onclick="nextPage(2)">Next</button>
+    </div>
+    </div>
+	<!-- 回到最上面按鈕 -->
+    <button class="back-to-top">回到最上面</button>
+	 
+	 <button id="scrollToBottom" onclick="scrollToBottom()">跳到最下面</button>
+   
+    <script>
+    const restaurantsPerPage = 8; // 每頁顯示8個餐廳
+    const restaurants = document.querySelectorAll('.restaurant'); // 取得所有餐廳元素
+    const pagination = document.getElementById('pagination');
+    const totalRestaurants = restaurants.length; // 取得餐廳總數
+    const totalPages = Math.ceil(totalRestaurants / restaurantsPerPage); // 計算總頁數
+
+    let currentPage = 1; // 記錄當前頁數
+
+    // 根據頁碼顯示對應的餐廳
+    function goToPage(pageNumber) {
+        currentPage = pageNumber; // 更新當前頁數
+        const start = (pageNumber - 1) * restaurantsPerPage;
+        const end = start + restaurantsPerPage;
+
+        // 隱藏所有餐廳
+        restaurants.forEach((restaurant, index) => {
+            if (index >= start && index < end) {
+                restaurant.style.display = 'block'; // 顯示當前頁面的餐廳
+            } else {
+                restaurant.style.display = 'none'; // 隱藏其他頁面的餐廳
+            }
+        });
+		
+		// 自動回到最上面
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+        // 更新分頁按鈕的顯示狀態
+        updatePaginationButtons();
+    }
+
+    // 更新分頁按鈕的顯示狀態
+    function updatePaginationButtons() {
+        const paginationContainer = document.querySelector('.pagination');
+        paginationContainer.innerHTML = ''; // 清空現有的按鈕
+
+       const startPage = Math.max(currentPage - 4, 1); // 顯示更多前面的頁碼
+const endPage = Math.min(currentPage + 6, totalPages); // 顯示更多後面的頁碼
+
+        // 生成每頁的分頁按鈕
+        for (let i = startPage; i <= endPage; i++) {
+            const button = document.createElement('button');
+            button.textContent = i;
+            button.onclick = () => goToPage(i); // 點擊按鈕跳轉到相應頁數
+            if (i === currentPage) {
+                button.classList.add('active'); // 當前頁按鈕加上 active 類別
+            }
+            paginationContainer.appendChild(button);
+        }
+
+        // 生成上一頁和下一頁的按鈕
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Prev';
+        prevButton.onclick = () => {
+            if (currentPage > 1) goToPage(currentPage - 1);
+        };
+
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.onclick = () => {
+            if (currentPage < totalPages) goToPage(currentPage + 1);
+        };
+
+        // 添加上一頁和下一頁的按鈕到分頁區
+        paginationContainer.insertBefore(prevButton, paginationContainer.firstChild);
+        paginationContainer.appendChild(nextButton);
+    }
+
+    // 回到最上面按鈕
+    window.addEventListener('scroll', function () {
+        let button = document.querySelector('.back-to-top');
+        if (window.scrollY > 300) { // 滾動超過 300px 顯示按鈕
+            button.style.display = 'block';
+        } else {
+            button.style.display = 'none';
+        }
+    });
+
+    document.querySelector('.back-to-top').addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // 廣告關閉功能
+    function closeAd(adId) {
+        document.getElementById(adId).style.display = "none";
+    }
+
+    // 跳到最下面
+    function scrollToBottom() {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+	
+	function confirmCloseAd(adId) {
+    let reason = prompt("請問您為什麼要關閉這則廣告？\n1. 不感興趣\n2. 擋到你看美食了\n3. 我就不想看廣告\n4. 其他");
+    
+    if (reason !== null) { 
+        document.getElementById(adId).style.display = "none";
+        console.log("使用者關閉廣告，原因：" + reason); // 可以將這個記錄發送到伺服器分析
+    }
+}
+
+    // 預設顯示第一頁
+    goToPage(1);
+</script>
+</body>
+</html>
+
+
